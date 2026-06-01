@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="chat-layout">
+    <div class="glass-card form-shell">
+        <div class="section-heading">
+            <span class="section-tag">Ask a Question</span>
+            <h2>Rule-based farming chatbot</h2>
+            <p>Ask about crop planning, soil, fertilizer, irrigation, weather, plant health, pH, or rainfall.</p>
+        </div>
+
+        <form action="{{ url_for('chatbot') }}" method="POST" class="smart-form">
+            <div class="input-group">
+                <label for="chat-question">Your farming question</label>
+                <input id="chat-question" type="text" name="question" value="{{ question }}" placeholder="Example: How do I manage low rainfall for maize?" required>
+            </div>
+            <button class="btn btn-block" type="submit">Ask Chatbot</button>
+        </form>
+
+        <div class="prompt-chip-row">
+            <button type="button" class="prompt-chip" data-prompt="Which crop fits high rainfall and humid conditions?">Crop</button>
+            <button type="button" class="prompt-chip" data-prompt="How do I improve soil health naturally?">Soil</button>
+            <button type="button" class="prompt-chip" data-prompt="What is the role of nitrogen in fertilizer planning?">Fertilizer</button>
+            <button type="button" class="prompt-chip" data-prompt="When should I use drip irrigation?">Irrigation</button>
+            <button type="button" class="prompt-chip" data-prompt="How does pH affect crop growth?">pH</button>
+            <button type="button" class="prompt-chip" data-prompt="What should I do before heavy rainfall?">Rainfall</button>
+        </div>
+
+        <div class="note-card">
+            <strong>Supported topics</strong>
+            <p>Crop, soil, fertilizer, irrigation, weather, plant health, pH, and rainfall are all handled through a simple stable keyword-based flow.</p>
+        </div>
+    </div>
+
+    <div class="glass-card chat-window">
+        <div class="chat-window-header">
+            <div>
+                <span class="section-tag">Conversation</span>
+                <h2>AgriVision AI Assistant</h2>
+            </div>
+            <span class="status-pill">Online Demo</span>
+        </div>
+
+        <div class="chat-thread">
+            <article class="chat-message bot">
+                <div class="chat-avatar bot-avatar">AI</div>
+                <div class="chat-content">
+                    <div class="chat-meta">
+                        <strong>AgriVision AI</strong>
+                        <span>Assistant</span>
+                    </div>
+                    <div class="chat-surface">
+                        <p>I can help with crop planning, soil health, fertilizer decisions, irrigation timing, weather caution, plant health, pH, and rainfall planning.</p>
+                    </div>
+                </div>
+            </article>
+
+            {% if response %}
+            <article class="chat-message user">
+                <div class="chat-avatar user-avatar">You</div>
+                <div class="chat-content">
+                    <div class="chat-meta">
+                        <strong>Farmer</strong>
+                        <span>Question</span>
+                    </div>
+                    <div class="chat-surface">
+                        <p>{{ question }}</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chat-message bot">
+                <div class="chat-avatar bot-avatar">AI</div>
+                <div class="chat-content">
+                    <div class="chat-meta">
+                        <strong>{{ response.topic }}</strong>
+                        <span>Response</span>
+                    </div>
+                    <div class="chat-surface">
+                        <p>{{ response.answer }}</p>
+                    </div>
+                </div>
+            </article>
+            {% else %}
+            <article class="chat-message user">
+                <div class="chat-avatar user-avatar">You</div>
+                <div class="chat-content">
+                    <div class="chat-meta">
+                        <strong>Sample question</strong>
+                        <span>Try a prompt chip</span>
+                    </div>
+                    <div class="chat-surface">
+                        <p>How do I improve soil health naturally?</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chat-message bot">
+                <div class="chat-avatar bot-avatar">AI</div>
+                <div class="chat-content">
+                    <div class="chat-meta">
+                        <strong>Soil Health</strong>
+                        <span>Preview reply</span>
+                    </div>
+                    <div class="chat-surface">
+                        <p>Healthy soil needs drainage, organic matter, and balanced nutrients. Use compost, avoid compaction, and check pH before making heavy fertilizer decisions.</p>
+                    </div>
+                </div>
+            </article>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<script>
+    const promptButtons = document.querySelectorAll("[data-prompt]");
+    const chatQuestion = document.getElementById("chat-question");
+
+    promptButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            if (chatQuestion) {
+                chatQuestion.value = button.getAttribute("data-prompt");
+                chatQuestion.focus();
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-panel">
+    <div class="hero-copy">
+        <span class="chip">Photo + symptom crop disease support</span>
+        <h2>Upload a crop photo and get possible disease guidance.</h2>
+        <p>
+            Farmers can upload a clear leaf or crop photo, or enter symptoms manually. The system analyzes visible color patterns and gives possible disease/stress guidance with safe next steps.
+        </p>
+        <div class="button-row">
+            <a class="btn btn-secondary" href="#photo-checker">Upload Photo</a>
+            <a class="btn btn-ghost" href="#symptom-checker">Use Symptoms</a>
+        </div>
+    </div>
+
+    <div class="hero-side">
+        <div class="stack-card accent-card">
+            <span class="card-kicker">New Feature</span>
+            <strong>Crop photo upload</strong>
+            <p>Upload JPG, PNG, JPEG, or WEBP crop photos directly from mobile or desktop.</p>
+        </div>
+        <div class="stack-card">
+            <span class="card-kicker">Visual Analysis</span>
+            <strong>Yellowing, spots, powder, rot</strong>
+            <p>The app checks visible patterns like yellow leaves, brown spots, white powder, and dark rot areas.</p>
+        </div>
+        <div class="stack-card">
+            <span class="card-kicker">Safe Guidance</span>
+            <strong>Possible disease answer</strong>
+            <p>The result gives likely disease/stress type and practical farmer-friendly actions.</p>
+        </div>
+    </div>
+</section>
+
+<section class="two-column crop-layout" id="photo-checker">
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Photo Disease Finder</span>
+            <h2>Upload crop photo</h2>
+            <p>Use a clear photo of the affected leaf, stem, fruit, or full plant. Daylight photos give better results.</p>
+        </div>
+
+        <form class="smart-form" method="POST" action="{{ url_for('plant_health') }}" enctype="multipart/form-data">
+            <input type="hidden" name="check_type" value="image">
+            <div class="form-grid form-grid-two">
+                <div class="input-group">
+                    <label for="image_crop">Crop name</label>
+                    <input
+                        type="text"
+                        id="image_crop"
+                        name="image_crop"
+                        placeholder="Example: Rice, Tomato, Cotton, Potato"
+                        value="{{ photo_form.image_crop }}"
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="crop_photo">Crop / leaf photo</label>
+                    <input
+                        type="file"
+                        id="crop_photo"
+                        name="crop_photo"
+                        accept="image/png,image/jpeg,image/jpg,image/webp"
+                        required
+                    >
+                </div>
+            </div>
+
+            <button class="btn" type="submit">Analyze Photo Disease</button>
+        </form>
+
+        <div class="note-card" style="margin-top: 1rem;">
+            <strong>Best photo tips</strong>
+            <p>Take one close-up photo of the infected area and one full-plant photo. Avoid blurry, dark, or heavily shadowed images.</p>
+        </div>
+    </div>
+
+    <div class="glass-card placeholder-panel">
+        <div class="section-heading">
+            <span class="section-tag">Photo Result</span>
+            <h2>Possible disease from image</h2>
+            <p>The app checks visible color patterns from the uploaded photo.</p>
+        </div>
+
+        {% if image_result %}
+        {% if image_result.image_url %}
+        <div class="note-card">
+            <strong>Uploaded crop photo</strong>
+            <img src="{{ image_result.image_url }}" alt="Uploaded crop photo" style="width: 100%; max-height: 280px; object-fit: cover; border-radius: 18px; margin-top: 0.75rem;">
+        </div>
+        {% endif %}
+
+        <div class="result-banner-note">
+            <strong>{{ image_result.disease }}</strong>
+            <small>Confidence: {{ image_result.confidence }}</small>
+        </div>
+
+        {% if image_result.visual_signs %}
+        <div class="note-card">
+            <strong>Detected visual signs</strong>
+            <div class="prompt-chip-row">
+                {% for sign in image_result.visual_signs %}
+                <span class="prompt-chip">{{ sign }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if image_result.percentages %}
+        <div class="note-card">
+            <strong>Image pattern score</strong>
+            <div class="clean-list">
+                <div class="list-row"><strong>Green leaf area</strong><span>{{ image_result.percentages.green }}%</span></div>
+                <div class="list-row"><strong>Yellowing</strong><span>{{ image_result.percentages.yellow }}%</span></div>
+                <div class="list-row"><strong>Brown spots</strong><span>{{ image_result.percentages.brown_spots }}%</span></div>
+                <div class="list-row"><strong>White powder</strong><span>{{ image_result.percentages.white_powder }}%</span></div>
+                <div class="list-row"><strong>Dark rotten area</strong><span>{{ image_result.percentages.dark_rotten_area }}%</span></div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="note-card">
+            <strong>Recommended actions</strong>
+            <div class="clean-list">
+                {% for action in image_result.actions %}
+                <div class="list-row">
+                    <strong>Step {{ loop.index }}</strong>
+                    <span>{{ action }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="note-card">
+            <strong>Prevention</strong>
+            <p>{{ image_result.prevention }}</p>
+        </div>
+
+        <div class="note-card">
+            <strong>Important note</strong>
+            <p>{{ image_result.disclaimer }}</p>
+        </div>
+        {% else %}
+        <div class="note-card">
+            <strong>No photo submitted yet</strong>
+            <p>Upload a crop or leaf image to get a possible disease/stress answer.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="two-column crop-layout" id="symptom-checker">
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Symptom Disease Finder</span>
+            <h2>Or enter crop symptoms</h2>
+            <p>Example: “brown circular spots with yellow border on lower tomato leaves”.</p>
+        </div>
+
+        <form class="smart-form" method="POST" action="{{ url_for('plant_health') }}">
+            <input type="hidden" name="check_type" value="symptom">
+            <div class="form-grid form-grid-two">
+                <div class="input-group">
+                    <label for="crop">Crop name</label>
+                    <input
+                        type="text"
+                        id="crop"
+                        name="crop"
+                        placeholder="Example: Rice, Tomato, Cotton, Mango"
+                        value="{{ disease_form.crop }}"
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="affected_part">Affected part</label>
+                    <select id="affected_part" name="affected_part">
+                        <option value="">Select affected part</option>
+                        {% for option in affected_part_options %}
+                        <option value="{{ option }}" {% if disease_form.affected_part == option %}selected{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="field_condition">Field condition</label>
+                    <select id="field_condition" name="field_condition">
+                        <option value="">Select field condition</option>
+                        {% for option in field_condition_options %}
+                        <option value="{{ option }}" {% if disease_form.field_condition == option %}selected{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="severity">Severity</label>
+                    <select id="severity" name="severity">
+                        <option value="">Select severity</option>
+                        {% for option in severity_options %}
+                        <option value="{{ option }}" {% if disease_form.severity == option %}selected{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group form-grid-full">
+                    <label for="symptoms">Visible symptoms</label>
+                    <textarea
+                        id="symptoms"
+                        name="symptoms"
+                        rows="5"
+                        placeholder="Example: yellow leaves, brown spots, white powder, leaf curling, wilting, fruit rot, black root..."
+                    >{{ disease_form.symptoms }}</textarea>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" type="submit">Find Disease From Symptoms</button>
+        </form>
+    </div>
+
+    <div class="glass-card placeholder-panel">
+        <div class="section-heading">
+            <span class="section-tag">Symptom Result</span>
+            <h2>Possible disease guidance</h2>
+            <p>The output is based on crop symptoms and field conditions.</p>
+        </div>
+
+        {% if disease_result %}
+        <div class="result-banner-note">
+            <strong>{{ disease_result.disease }}</strong>
+            <small>Confidence: {{ disease_result.confidence }}</small>
+        </div>
+
+        <div class="note-card">
+            <strong>Why this may happen</strong>
+            <p>{{ disease_result.cause }}</p>
+        </div>
+
+        {% if disease_result.matched_keywords %}
+        <div class="note-card">
+            <strong>Matched signs</strong>
+            <div class="prompt-chip-row">
+                {% for keyword in disease_result.matched_keywords %}
+                <span class="prompt-chip">{{ keyword }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="note-card">
+            <strong>Immediate actions</strong>
+            <div class="clean-list">
+                {% for action in disease_result.actions %}
+                <div class="list-row">
+                    <strong>Step {{ loop.index }}</strong>
+                    <span>{{ action }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="note-card">
+            <strong>Prevention</strong>
+            <p>{{ disease_result.prevention }}</p>
+        </div>
+
+        <div class="note-card">
+            <strong>Important note</strong>
+            <p>{{ disease_result.disclaimer }}</p>
+        </div>
+        {% else %}
+        <div class="note-card">
+            <strong>No symptom check submitted yet</strong>
+            <p>Fill the symptom form to get possible crop disease guidance.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="feature-grid guide-grid">
+    <div class="guide-card">
+        <span class="feature-icon">&#128247;</span>
+        <h3>Photo Upload</h3>
+        <p>User uploads a crop photo, and the system checks visible patterns from the image.</p>
+    </div>
+    <div class="guide-card">
+        <span class="feature-icon">&#127807;</span>
+        <h3>Leaf Yellowing</h3>
+        <p>May come from nutrient deficiency, water stress, pest attack, or disease pressure.</p>
+    </div>
+    <div class="guide-card">
+        <span class="feature-icon">&#128300;</span>
+        <h3>Leaf Spots</h3>
+        <p>Brown, black, ring-shaped, or water-soaked spots can indicate fungal or bacterial disease.</p>
+    </div>
+    <div class="guide-card">
+        <span class="feature-icon">&#129716;</span>
+        <h3>White Powder</h3>
+        <p>White powder-like patches can indicate powdery mildew or fungal growth.</p>
+    </div>
+    <div class="guide-card">
+        <span class="feature-icon">&#128167;</span>
+        <h3>Wilting</h3>
+        <p>Can happen because of low water, root rot, bacterial wilt, or heat stress.</p>
+    </div>
+    <div class="guide-card">
+        <span class="feature-icon">&#128030;</span>
+        <h3>Pest Signs</h3>
+        <p>Look for eggs, holes, sticky honeydew, webbing, whiteflies, aphids, or mites.</p>
+    </div>
+</section>
+{% endblock %}

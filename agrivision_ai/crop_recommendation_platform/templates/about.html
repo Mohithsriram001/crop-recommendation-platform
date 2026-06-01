@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="two-column">
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Project Summary</span>
+            <h2>AgriVision AI - Smart Farming Assistant</h2>
+        </div>
+        <p class="lead-text">
+            This project recommends suitable crops by combining soil nutrients and climate indicators inside a Flask web application. The platform keeps the original prediction model intact and upgrades the experience into a professional smart farming product.
+        </p>
+        <div class="clean-list">
+            <div class="list-row">
+                <strong>Stack retained</strong>
+                <span>Flask, HTML, CSS, JavaScript, Python ML model, and the existing `joblib` file.</span>
+            </div>
+            <div class="list-row">
+                <strong>Core prediction inputs</strong>
+                <span>Nitrogen, phosphorus, potassium, temperature, humidity, pH, and rainfall.</span>
+            </div>
+            <div class="list-row">
+                <strong>Support modules</strong>
+                <span>Dashboard, plant health, weather advisory, chatbot, profile, login, and register flows.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Architecture</span>
+            <h2>How the platform works</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <strong>1. Flask routing</strong>
+                <p>Each page is served by a dedicated route with template names that now match the actual files.</p>
+            </div>
+            <div class="timeline-item">
+                <strong>2. Existing model load</strong>
+                <p>The app loads `models/best_crop_model.joblib` and keeps the prediction logic focused on the original seven-feature input array.</p>
+            </div>
+            <div class="timeline-item">
+                <strong>3. Advisory presentation</strong>
+                <p>Prediction output is expanded into suitable season, soil type, water requirement, growth duration, and smart farming advice.</p>
+            </div>
+            <div class="timeline-item">
+                <strong>4. Stable demos</strong>
+                <p>Weather and chatbot pages remain functional without external APIs, new packages, or fake disconnected screens.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="feature-grid">
+    <div class="feature-card static-card">
+        <span class="feature-icon">&#129716;</span>
+        <h3>ML Integration</h3>
+        <p>The original trained crop recommendation model remains the decision engine behind the core product experience.</p>
+    </div>
+    <div class="feature-card static-card">
+        <span class="feature-icon">&#127793;</span>
+        <h3>Farmer-Centered UX</h3>
+        <p>The UI focuses on clarity, readable outputs, working navigation, and content that feels useful for a real agriculture platform.</p>
+    </div>
+    <div class="feature-card static-card">
+        <span class="feature-icon">&#128295;</span>
+        <h3>Simple Setup</h3>
+        <p>The project remains easy to run with the same straightforward Flask startup pattern and no unnecessary technology changes.</p>
+    </div>
+</section>
+{% endblock %}

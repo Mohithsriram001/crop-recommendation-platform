@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="metric-grid">
+    <div class="metric-card">
+        <span class="metric-icon">&#129716;</span>
+        <strong>Model Status</strong>
+        <p>Existing joblib crop prediction model loaded and ready.</p>
+    </div>
+    <div class="metric-card">
+        <span class="metric-icon">&#128167;</span>
+        <strong>Decision Inputs</strong>
+        <p>7 required environmental values plus soil, season, and irrigation context.</p>
+    </div>
+    <div class="metric-card">
+        <span class="metric-icon">&#9925;</span>
+        <strong>Weather Mode</strong>
+        <p>Stable local demo advisory without external API dependencies.</p>
+    </div>
+    <div class="metric-card">
+        <span class="metric-icon">&#129302;</span>
+        <strong>Chatbot Mode</strong>
+        <p>Rule-based farmer assistant for common agriculture questions.</p>
+    </div>
+</section>
+
+{% if last_prediction %}
+<section class="glass-card banner-card">
+    <div>
+        <span class="section-tag">Latest Recommendation</span>
+        <h2>{{ last_prediction.crop }}</h2>
+        <p>Your most recent crop advisory is still available as a quick dashboard reference.</p>
+    </div>
+    <div class="inline-badges">
+        <span class="badge">Season: {{ last_prediction.season }}</span>
+        <span class="badge">Water: {{ last_prediction.water }}</span>
+    </div>
+</section>
+{% endif %}
+
+<section class="feature-grid">
+    <a class="feature-card" href="{{ url_for('crop_intelligence') }}">
+        <span class="feature-icon">&#127793;</span>
+        <h3>Crop Intelligence</h3>
+        <p>Run the main recommendation workflow with a professional form and polished result screen.</p>
+    </a>
+    <a class="feature-card" href="{{ url_for('plant_health') }}">
+        <span class="feature-icon">&#127807;</span>
+        <h3>Plant Health</h3>
+        <p>Open the practical field guide for nutrient deficiency, pest prevention, and crop care checks.</p>
+    </a>
+    <a class="feature-card" href="{{ url_for('weather') }}">
+        <span class="feature-icon">&#127783;</span>
+        <h3>Weather Advisory</h3>
+        <p>Generate location-based weather guidance in demo mode with useful farm actions.</p>
+    </a>
+    <a class="feature-card" href="{{ url_for('chatbot') }}">
+        <span class="feature-icon">&#129302;</span>
+        <h3>AI Chatbot</h3>
+        <p>Ask farming questions and get stable rule-based answers for common agricultural topics.</p>
+    </a>
+    <a class="feature-card" href="{{ url_for('profile') }}">
+        <span class="feature-icon">&#128100;</span>
+        <h3>Profile</h3>
+        <p>View the active demo farmer workspace and session-based profile information.</p>
+    </a>
+    <a class="feature-card" href="{{ url_for('about') }}">
+        <span class="feature-icon">&#8505;</span>
+        <h3>About Platform</h3>
+        <p>Explain the project story, architecture, and smart farming value in a presentation-ready format.</p>
+    </a>
+</section>
+
+<section class="two-column">
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Action Focus</span>
+            <h2>Recommended platform flow</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <strong>Start with crop prediction</strong>
+                <p>Use the main form to collect nutrient and climate data before any advisory work begins.</p>
+            </div>
+            <div class="timeline-item">
+                <strong>Review field-readiness advice</strong>
+                <p>Check water need, suitable soil, season fit, and growth duration on the result page.</p>
+            </div>
+            <div class="timeline-item">
+                <strong>Expand the recommendation</strong>
+                <p>Move into plant health and weather tools to support day-to-day operational decisions.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Workspace Snapshot</span>
+            <h2>Active farm profile</h2>
+        </div>
+        <div class="clean-list">
+            <div class="list-row">
+                <strong>Farmer</strong>
+                <span>{{ current_user.name }}</span>
+            </div>
+            <div class="list-row">
+                <strong>Location</strong>
+                <span>{{ current_user.location }}</span>
+            </div>
+            <div class="list-row">
+                <strong>Land Area</strong>
+                <span>{{ current_user.land_area }}</span>
+            </div>
+            <div class="list-row">
+                <strong>Focus Crop</strong>
+                <span>{{ current_user.focus_crop }}</span>
+            </div>
+            <div class="list-row">
+                <strong>Experience</strong>
+                <span>{{ current_user.experience }}</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

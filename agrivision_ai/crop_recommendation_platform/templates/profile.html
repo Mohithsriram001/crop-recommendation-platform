@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="profile-grid">
+    <div class="glass-card">
+        <div class="profile-header">
+            <div class="profile-avatar">{{ current_user.name[:1] | upper }}</div>
+            <div>
+                <span class="section-tag">Farmer Workspace</span>
+                <h2>{{ current_user.name }}</h2>
+                <p>{% if is_demo_user %}Demo profile currently active{% else %}Session-based profile active{% endif %}</p>
+            </div>
+        </div>
+
+        <div class="clean-list">
+            <div class="list-row">
+                <strong>Email</strong>
+                <span>{{ current_user.email }}</span>
+            </div>
+            <div class="list-row">
+                <strong>Phone</strong>
+                <span>{{ current_user.phone }}</span>
+            </div>
+            <div class="list-row">
+                <strong>Location</strong>
+                <span>{{ current_user.location }}</span>
+            </div>
+            <div class="list-row">
+                <strong>Land Area</strong>
+                <span>{{ current_user.land_area }}</span>
+            </div>
+            <div class="list-row">
+                <strong>Experience</strong>
+                <span>{{ current_user.experience }}</span>
+            </div>
+            <div class="list-row">
+                <strong>Focus Crop</strong>
+                <span>{{ current_user.focus_crop }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-stack">
+        <div class="glass-card">
+            <div class="section-heading">
+                <span class="section-tag">Account Status</span>
+                <h2>Profile mode</h2>
+            </div>
+            <div class="clean-list">
+                <div class="list-row">
+                    <strong>Authentication</strong>
+                    <span>Session-based demo mode</span>
+                </div>
+                <div class="list-row">
+                    <strong>Database required</strong>
+                    <span>No new database added</span>
+                </div>
+                <div class="list-row">
+                    <strong>Recommended action</strong>
+                    <span>Use this profile to prefill crop intelligence and present a farmer journey.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div class="section-heading">
+                <span class="section-tag">Latest Result</span>
+                <h2>Prediction summary</h2>
+            </div>
+            {% if last_prediction %}
+            <div class="clean-list">
+                <div class="list-row">
+                    <strong>Recommended Crop</strong>
+                    <span>{{ last_prediction.crop }}</span>
+                </div>
+                <div class="list-row">
+                    <strong>Season</strong>
+                    <span>{{ last_prediction.season }}</span>
+                </div>
+                <div class="list-row">
+                    <strong>Water Need</strong>
+                    <span>{{ last_prediction.water }}</span>
+                </div>
+            </div>
+            {% else %}
+            <p class="lead-text">No prediction has been run in this session yet. Start from the crop intelligence page to create a recommendation history.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<div class="button-row">
+    <a class="btn" href="{{ url_for('edit_profile') }}">Edit Profile</a>
+    <a class="btn btn-secondary" href="{{ url_for('crop_intelligence') }}">Open Crop Intelligence</a>
+    <a class="btn btn-secondary" href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</div>
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="two-column crop-layout">
+    <div class="glass-card form-shell">
+        <div class="section-heading">
+            <span class="section-tag">Prediction Form</span>
+            <h2>Enter field and climate conditions</h2>
+            <p>Submit the required model inputs through the existing `/predict` route using a clean professional form.</p>
+        </div>
+
+        <form action="{{ url_for('predict') }}" method="POST" class="smart-form">
+            <input type="hidden" name="farmer_name" value="{{ form_defaults.farmer_name }}">
+            <input type="hidden" name="phone" value="{{ form_defaults.phone }}">
+
+            <div class="form-grid form-grid-two">
+                <div class="input-group">
+                    <label for="location">Farm Location</label>
+                    <input id="location" type="text" name="location" value="{{ form_defaults.location }}" placeholder="Enter city, village, or farm location" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="land_area">Land Area</label>
+                    <input id="land_area" type="text" name="land_area" value="{{ form_defaults.land_area }}" placeholder="Example: 2 acres" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="soil_type">Soil Type</label>
+                    <select id="soil_type" name="soil_type" required>
+                        <option value="">Select soil type</option>
+                        {% for item in soil_options %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="season">Season</label>
+                    <select id="season" name="season" required>
+                        <option value="">Select season</option>
+                        {% for item in season_options %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group form-grid-full">
+                    <label for="irrigation">Irrigation Type</label>
+                    <select id="irrigation" name="irrigation" required>
+                        <option value="">Select irrigation type</option>
+                        {% for item in irrigation_options %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="nitrogen">Nitrogen</label>
+                    <input id="nitrogen" type="number" step="any" name="nitrogen" placeholder="Example: 90" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="phosphorus">Phosphorus</label>
+                    <input id="phosphorus" type="number" step="any" name="phosphorus" placeholder="Example: 42" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="potassium">Potassium</label>
+                    <input id="potassium" type="number" step="any" name="potassium" placeholder="Example: 43" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="temperature">Temperature</label>
+                    <input id="temperature" type="number" step="any" name="temperature" placeholder="In Celsius" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="humidity">Humidity</label>
+                    <input id="humidity" type="number" step="any" name="humidity" placeholder="In percentage" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="ph">pH</label>
+                    <input id="ph" type="number" step="any" name="ph" placeholder="Example: 6.5" required>
+                </div>
+
+                <div class="input-group form-grid-full">
+                    <label for="rainfall">Rainfall</label>
+                    <input id="rainfall" type="number" step="any" name="rainfall" placeholder="In millimeters" required>
+                </div>
+            </div>
+
+            <button class="btn btn-block" type="submit">Predict Best Crop</button>
+        </form>
+    </div>
+
+    <div class="side-stack">
+        <div class="glass-card">
+            <div class="section-heading">
+                <span class="section-tag">Model Input Guide</span>
+                <h2>What the model reads</h2>
+            </div>
+            <div class="clean-list">
+                <div class="list-row">
+                    <strong>NPK nutrients</strong>
+                    <span>These values describe soil fertility and strongly influence crop fit.</span>
+                </div>
+                <div class="list-row">
+                    <strong>Temperature and humidity</strong>
+                    <span>Climate conditions help identify whether the crop can grow comfortably in the field.</span>
+                </div>
+                <div class="list-row">
+                    <strong>pH and rainfall</strong>
+                    <span>These values help the system interpret nutrient availability and moisture conditions.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div class="section-heading">
+                <span class="section-tag">Data Quality Tips</span>
+                <h2>How to get a better result</h2>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <strong>Use realistic field values</strong>
+                    <p>Enter measured or estimated values from recent soil and weather observations.</p>
+                </div>
+                <div class="timeline-item">
+                    <strong>Choose dropdown values carefully</strong>
+                    <p>Soil type, season, and irrigation do not change the ML output directly, but they shape the final advisory context.</p>
+                </div>
+                <div class="timeline-item">
+                    <strong>Review the result holistically</strong>
+                    <p>Combine the crop recommendation with water planning, growth duration, and plant health monitoring.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="auth-layout">
+    <div class="glass-card auth-card">
+        <div class="section-heading">
+            <span class="section-tag">Register</span>
+            <h2>Create demo farmer profile</h2>
+            <p>Capture realistic account details without introducing a new database dependency.</p>
+        </div>
+
+        <form action="{{ url_for('register') }}" method="POST" class="smart-form">
+            <div class="form-grid form-grid-two">
+                <div class="input-group">
+                    <label for="register-name">Full Name</label>
+                    <input id="register-name" type="text" name="name" placeholder="Enter full name" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="register-email">Email Address</label>
+                    <input id="register-email" type="email" name="email" placeholder="farmer@example.com" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="register-phone">Phone Number</label>
+                    <input id="register-phone" type="text" name="phone" placeholder="Enter phone number" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="register-location">Location</label>
+                    <input id="register-location" type="text" name="location" placeholder="Village, city, or district" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="register-land-area">Land Area</label>
+                    <input id="register-land-area" type="text" name="land_area" placeholder="Example: 3 acres" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="register-experience">Experience</label>
+                    <input id="register-experience" type="text" name="experience" placeholder="Example: 5 years" required>
+                </div>
+
+                <div class="input-group form-grid-full">
+                    <label for="register-focus-crop">Focus Crop</label>
+                    <input id="register-focus-crop" type="text" name="focus_crop" placeholder="Example: Paddy, maize, or banana" required>
+                </div>
+
+                <div class="input-group form-grid-full">
+                    <label for="register-password">Password</label>
+                    <input id="register-password" type="password" name="password" placeholder="Create a password" required>
+                </div>
+            </div>
+
+            <button class="btn btn-block" type="submit">Register</button>
+        </form>
+
+        <p class="auth-link">
+            Already have access?
+            <a href="{{ url_for('login') }}">Login here</a>
+        </p>
+    </div>
+
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Profile value</span>
+            <h2>What this enables</h2>
+        </div>
+        <div class="clean-list">
+            <div class="list-row">
+                <strong>Personalized context</strong>
+                <span>Location, land area, and focus crop flow into the session-based farmer workspace.</span>
+            </div>
+            <div class="list-row">
+                <strong>Presentation readiness</strong>
+                <span>The profile page looks complete even without backend account storage.</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

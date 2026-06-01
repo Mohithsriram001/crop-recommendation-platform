@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="two-column">
+    <div class="glass-card form-shell">
+        <div class="section-heading">
+            <span class="section-tag">Weather Input</span>
+            <h2>Generate a local advisory</h2>
+            <p>Enter a city, village, or farm location to create a working demo weather report for farming decisions.</p>
+        </div>
+
+        <form action="{{ url_for('weather') }}" method="POST" class="smart-form">
+            <div class="input-group">
+                <label for="weather-location">City or Farm Location</label>
+                <input id="weather-location" type="text" name="location" value="{{ submitted_location }}" placeholder="Example: Salem or Nashik" required>
+            </div>
+            <button class="btn btn-block" type="submit">Check Advisory</button>
+        </form>
+
+        <div class="note-card">
+            <strong>Demo mode note</strong>
+            <p>This page intentionally avoids external APIs, so the advisory is generated locally and remains stable without API keys.</p>
+        </div>
+    </div>
+
+    {% if weather_report %}
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Generated Report</span>
+            <h2>{{ weather_report.location }}</h2>
+            <p>{{ weather_report.demo_note }}</p>
+        </div>
+
+        <div class="metric-grid weather-metrics">
+            <div class="metric-card">
+                <span class="metric-icon">&#9729;</span>
+                <strong>Condition</strong>
+                <p>{{ weather_report.condition }}</p>
+            </div>
+            <div class="metric-card">
+                <span class="metric-icon">&#127777;</span>
+                <strong>Temperature</strong>
+                <p>{{ weather_report.temperature }}</p>
+            </div>
+            <div class="metric-card">
+                <span class="metric-icon">&#128167;</span>
+                <strong>Humidity</strong>
+                <p>{{ weather_report.humidity }}</p>
+            </div>
+            <div class="metric-card">
+                <span class="metric-icon">&#127783;</span>
+                <strong>Rainfall</strong>
+                <p>{{ weather_report.rainfall }}</p>
+            </div>
+            <div class="metric-card">
+                <span class="metric-icon">&#127788;</span>
+                <strong>Wind</strong>
+                <p>{{ weather_report.wind }}</p>
+            </div>
+        </div>
+
+        <p class="lead-text">{{ weather_report.summary }}</p>
+
+        <div class="clean-list">
+            {% for item in weather_report.tips %}
+            <div class="list-row">
+                <strong>Advisory</strong>
+                <span>{{ item }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="advice-grid compact-grid">
+            {% for item in weather_report.operations %}
+            <div class="advice-card">
+                <strong>{{ item.title }}</strong>
+                <p>{{ item.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="glass-card placeholder-panel">
+        <div class="section-heading">
+            <span class="section-tag">What you will see</span>
+            <h2>Professional advisory output</h2>
+        </div>
+        <p class="lead-text">
+            The generated weather card includes condition, temperature, humidity, rainfall, wind, and practical farm actions that are safe to demo without any third-party integration.
+        </p>
+        <div class="clean-list">
+            <div class="list-row">
+                <strong>Suggested use</strong>
+                <span>Plan irrigation, fertilizer timing, and crop protection around the simulated local conditions.</span>
+            </div>
+            <div class="list-row">
+                <strong>Good demo locations</strong>
+                <span>Try Pune, Erode, Nashik, Mysuru, or any farm name you want to present with.</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

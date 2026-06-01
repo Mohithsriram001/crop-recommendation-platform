@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="glass-card">
+    <div class="section-heading">
+        <span class="section-tag">Farmer Details</span>
+        <h2>Edit profile information</h2>
+        <p class="lead-text">
+            Update farmer, farm, and crop details. After saving, the Profile page and Crop Intelligence page will use these updated values.
+        </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('edit_profile') }}" class="smart-form">
+        <div class="form-grid">
+            <label>
+                Farmer Name
+                <input
+                    type="text"
+                    name="name"
+                    value="{{ current_user.name }}"
+                    placeholder="Enter farmer name"
+                    required
+                >
+            </label>
+
+            <label>
+                Email
+                <input
+                    type="email"
+                    name="email"
+                    value="{{ current_user.email }}"
+                    placeholder="Enter email address"
+                    required
+                >
+            </label>
+
+            <label>
+                Phone Number
+                <input
+                    type="text"
+                    name="phone"
+                    value="{{ current_user.phone }}"
+                    placeholder="Enter mobile number"
+                    required
+                >
+            </label>
+
+            <label>
+                Farm Location
+                <input
+                    type="text"
+                    name="location"
+                    value="{{ current_user.location }}"
+                    placeholder="Village, district, state"
+                    required
+                >
+            </label>
+
+            <label>
+                Land Area
+                <input
+                    type="text"
+                    name="land_area"
+                    value="{{ current_user.land_area }}"
+                    placeholder="Example: 3 acres"
+                    required
+                >
+            </label>
+
+            <label>
+                Farming Experience
+                <input
+                    type="text"
+                    name="experience"
+                    value="{{ current_user.experience }}"
+                    placeholder="Example: 5 years"
+                    required
+                >
+            </label>
+
+            <label>
+                Focus Crop
+                <input
+                    type="text"
+                    name="focus_crop"
+                    value="{{ current_user.focus_crop }}"
+                    placeholder="Example: Rice, Cotton, Tomato"
+                    required
+                >
+            </label>
+        </div>
+
+        <div class="button-row">
+            <button type="submit" class="btn">Save Changes</button>
+            <a href="{{ url_for('profile') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

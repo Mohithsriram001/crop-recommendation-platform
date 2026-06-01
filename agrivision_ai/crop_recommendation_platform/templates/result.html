@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="result-banner">
+    <div>
+        <span class="chip chip-light">AI recommendation complete</span>
+        <h2>{{ prediction_label }}</h2>
+        <p>{{ crop_info.summary }}</p>
+    </div>
+
+    <div class="result-banner-note">
+        <span class="result-emoji">&#127793;</span>
+        <strong>Recommended crop</strong>
+        <small>Generated from your existing trained Flask model workflow.</small>
+    </div>
+</section>
+
+<section class="metric-grid">
+    <div class="metric-card">
+        <span class="metric-icon">&#127793;</span>
+        <strong>Recommended Crop</strong>
+        <p>{{ prediction_label }}</p>
+    </div>
+    <div class="metric-card">
+        <span class="metric-icon">&#128167;</span>
+        <strong>Water Requirement</strong>
+        <p>{{ crop_info.water }}</p>
+    </div>
+    <div class="metric-card">
+        <span class="metric-icon">&#127810;</span>
+        <strong>Suitable Season</strong>
+        <p>{{ crop_info.season }}</p>
+    </div>
+    <div class="metric-card">
+        <span class="metric-icon">&#9203;</span>
+        <strong>Growth Duration</strong>
+        <p>{{ crop_info.duration }}</p>
+    </div>
+</section>
+
+<section class="result-grid">
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Why This Crop</span>
+            <h2>Recommendation explanation</h2>
+        </div>
+        <p class="lead-text">
+            The system compared the submitted nutrient and climate values against the trained dataset and identified <strong>{{ prediction_label }}</strong> as the closest match.
+        </p>
+        <div class="reason-list">
+            {% for item in reason_points %}
+            <div class="reason-item">
+                <span class="reason-dot"></span>
+                <p>{{ item }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Input Conditions</span>
+            <h2>Submitted ML values</h2>
+        </div>
+        <div class="clean-list">
+            {% for item in input_conditions %}
+            <div class="list-row">
+                <strong>{{ item.label }}</strong>
+                <span>{{ item.value }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="two-column">
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Field Context</span>
+            <h2>Suitable farm setup</h2>
+        </div>
+        <div class="clean-list">
+            <div class="list-row">
+                <strong>Suitable Soil Type</strong>
+                <span>{{ crop_info.soil }}</span>
+            </div>
+            {% for item in field_context %}
+            <div class="list-row">
+                <strong>{{ item.label }}</strong>
+                <span>{{ item.value }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="section-heading">
+            <span class="section-tag">Smart Farming Advice</span>
+            <h2>What to do next</h2>
+        </div>
+        <div class="advice-grid">
+            {% for item in advice_cards %}
+            <div class="advice-card">
+                <strong>{{ item.title }}</strong>
+                <p>{{ item.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<div class="button-row">
+    <a class="btn" href="{{ url_for('crop_intelligence') }}">Predict Another Crop</a>
+    <a class="btn btn-secondary" href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</div>
+{% endblock %}

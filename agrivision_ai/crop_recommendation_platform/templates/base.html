@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} | {{ app_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="page-{{ page_key | default('app') }}">
+{% set is_auth_page = page_key in ['login', 'register'] %}
+{% set page_content %}{% block content %}{% endblock %}{% endset %}
+
+<div class="ambient-orb orb-one"></div>
+<div class="ambient-orb orb-two"></div>
+
+{% if is_auth_page %}
+<div class="auth-shell">
+    <header class="public-topbar">
+        <a class="brand" href="{{ url_for('home') }}">
+            <div class="brand-mark">&#127793;</div>
+            <div>
+                <strong>{{ app_name }}</strong>
+                <span>{{ app_tagline }}</span>
+            </div>
+        </a>
+
+        <nav class="public-nav">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+            {% if page_key == 'login' %}
+            <a href="{{ url_for('register') }}">Register</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-stack public-flash-stack">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <main class="auth-main">
+        <div class="auth-intro">
+            <span class="eyebrow">{{ page_eyebrow }}</span>
+            <h1>{{ page_title }}</h1>
+            <p>{{ page_subtitle }}</p>
+        </div>
+
+        <section class="page-content auth-page-content">
+            {{ page_content }}
+        </section>
+    </main>
+</div>
+{% else %}
+<div class="app-shell">
+    <aside class="sidebar" id="appSidebar">
+        <a class="brand" href="{{ url_for('home') }}">
+            <div class="brand-mark">&#127793;</div>
+            <div>
+                <strong>{{ app_name }}</strong>
+                <span>{{ app_tagline }}</span>
+            </div>
+        </a>
+
+        <p class="brand-copy">
+            Smart crop recommendation, disease finding, weather advisory, and farmer support built with your Flask and ML workflow.
+        </p>
+
+        <nav class="nav-list">
+            {% for item in nav_items %}
+            <a
+                href="{{ url_for(item.endpoint) }}"
+                class="nav-link {% if request.endpoint in item.active_endpoints %}is-active{% endif %}"
+            >
+                {{ item.label }}
+            </a>
+            {% endfor %}
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="mini-profile">
+                <div class="mini-avatar">{{ current_user.name[:1] | upper }}</div>
+                <div>
+                    <strong>{{ current_user.name }}</strong>
+                    <span>{% if is_demo_user %}Demo mode{% else %}Session active{% endif %}</span>
+                </div>
+            </div>
+
+            <div class="sidebar-actions">
+                {% if is_demo_user %}
+                <a class="btn btn-secondary btn-block" href="{{ url_for('login') }}">Login</a>
+                <a class="btn btn-ghost btn-block" href="{{ url_for('register') }}">Register</a>
+                {% else %}
+                <a class="btn btn-secondary btn-block" href="{{ url_for('profile') }}">View Profile</a>
+                <a class="btn btn-ghost btn-block" href="{{ url_for('logout') }}">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+    </aside>
+
+    <div class="sidebar-backdrop" data-menu-close></div>
+
+    <main class="main-panel">
+        <header class="topbar">
+            <button type="button" class="menu-toggle" data-menu-toggle>Menu</button>
+
+            <div class="page-intro">
+                <span class="eyebrow">{{ page_eyebrow }}</span>
+                <h1>{{ page_title }}</h1>
+                <p>{{ page_subtitle }}</p>
+            </div>
+
+            <div class="topbar-meta">
+                <span class="status-pill">{% if is_demo_user %}Demo Workspace{% else %}Session Active{% endif %}</span>
+                <strong>{{ current_user.location }}</strong>
+                <small>Focus: {{ current_user.focus_crop }}</small>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-stack">
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <section class="page-content">
+            {{ page_content }}
+        </section>
+    </main>
+</div>
+{% endif %}
+
+<script>
+    const body = document.body;
+    const openButton = document.querySelector("[data-menu-toggle]");
+    const closeTargets = document.querySelectorAll("[data-menu-close]");
+
+    if (openButton) {
+        openButton.addEventListener("click", function () {
+            body.classList.toggle("sidebar-open");
+        });
+    }
+
+    closeTargets.forEach(function (target) {
+        target.addEventListener("click", function () {
+            body.classList.remove("sidebar-open");
+        });
+    });
+</script>
+
+</body>
+</html>

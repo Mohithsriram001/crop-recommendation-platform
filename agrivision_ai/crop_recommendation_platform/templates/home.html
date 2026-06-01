@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .clean-home {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .clean-hero {
+        min-height: 620px;
+        display: flex;
+        align-items: center;
+        border-radius: 2rem;
+        padding: 3rem;
+        background:
+            radial-gradient(circle at top right, rgba(34, 197, 94, 0.28), transparent 35%),
+            linear-gradient(135deg, #0f5132, #22a65a);
+        color: #ffffff;
+        box-shadow: 0 24px 70px rgba(15, 81, 50, 0.28);
+    }
+
+    .clean-hero-content {
+        max-width: 900px;
+    }
+
+    .clean-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        color: #eafff1;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 1.4rem;
+    }
+
+    .clean-hero h1 {
+        margin: 0;
+        font-size: clamp(2.5rem, 5vw, 5.7rem);
+        line-height: 1.05;
+        letter-spacing: -0.06em;
+        max-width: 980px;
+    }
+
+    .clean-hero p {
+        margin-top: 1.4rem;
+        max-width: 760px;
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .clean-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .clean-actions a {
+        text-decoration: none;
+    }
+
+    .clean-primary,
+    .clean-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 0 1.6rem;
+        border-radius: 1rem;
+        font-weight: 800;
+        border: none;
+        transition: 0.2s ease;
+    }
+
+    .clean-primary {
+        background: #ffffff;
+        color: #0f5132;
+    }
+
+    .clean-secondary {
+        background: rgba(255, 255, 255, 0.18);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .clean-primary:hover,
+    .clean-secondary:hover {
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 900px) {
+        .clean-hero {
+            min-height: auto;
+            padding: 2rem;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .clean-hero {
+            padding: 1.5rem;
+            border-radius: 1.4rem;
+        }
+
+        .clean-hero h1 {
+            font-size: 2.4rem;
+        }
+
+        .clean-hero p {
+            font-size: 1rem;
+        }
+
+        .clean-actions {
+            flex-direction: column;
+        }
+
+        .clean-primary,
+        .clean-secondary {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="clean-home">
+    <section class="clean-hero">
+        <div class="clean-hero-content">
+            <div class="clean-tag">AgriVision AI</div>
+
+            <h1>Smart crop recommendation and plant health support.</h1>
+
+            <p>
+                A simple AI-powered farming platform for crop prediction, plant health checking,
+                weather guidance, and farmer support.
+            </p>
+
+            <div class="clean-actions">
+                <a href="{{ url_for('crop_intelligence') }}" class="clean-primary">
+                    Start Crop Prediction
+                </a>
+
+                <a href="{{ url_for('plant_health') }}" class="clean-secondary">
+                    Check Plant Health
+                </a>
+
+                <a href="{{ url_for('dashboard') }}" class="clean-secondary">
+                    Open Dashboard
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
